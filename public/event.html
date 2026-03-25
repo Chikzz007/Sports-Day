@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event Details — Sports Fest 2026</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <a href="index.html" class="logo">Sports Fest <span>2026</span></a>
+    <!-- Back link navigates to homepage -->
+    <a href="index.html" class="nav-back">All Sports</a>
+  </header>
+
+  <!-- ===== EVENT HERO SECTION ===== -->
+  <!-- Content here is filled dynamically by JavaScript below -->
+  <section class="event-hero">
+    <span class="event-badge" id="event-badge">Loading...</span>
+    <h2 id="event-title">Loading...</h2>
+    <p id="event-description">Please wait while we load the event details.</p>
+  </section>
+
+  <div class="divider">
+    <span class="divider-symbol">✦</span>
+  </div>
+
+  <!-- ===== TIME SLOT SELECTION ===== -->
+  <section class="slots-section">
+    <p class="slots-label">Select a Match Time</p>
+
+    <div class="slots-grid">
+      <!--
+        These buttons call selectSlot() with the time slot string.
+        JavaScript reads the event name from the URL and redirects
+        to register.html with both event name and time slot as query params.
+      -->
+      <button class="slot-btn" onclick="selectSlot('10 AM')">
+        <span class="slot-icon">🌅</span>
+        <span class="slot-time">10 AM</span>
+        <span class="slot-label">Morning Match</span>
+      </button>
+
+      <button class="slot-btn" onclick="selectSlot('2 PM')">
+        <span class="slot-icon">🌤️</span>
+        <span class="slot-time">2 PM</span>
+        <span class="slot-label">Afternoon Match</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    &copy; 2026 Sports Fest. All rights reserved.
+  </footer>
+
+  <script>
+    // ============================================================
+    // event.html — JavaScript
+    //
+    // This script:
+    // 1. Reads the event name from the URL query parameter (?event=...)
+    // 2. Fills in the page content dynamically
+    // 3. When a slot is clicked, redirects to register.html with
+    //    both event name and time slot as query parameters
+    // ============================================================
+
+    // --- Step 1: Read the event name from the URL ---
+    // e.g. event.html?event=Lucida  →  eventName = "Lucida"
+    const params    = new URLSearchParams(window.location.search);
+    const eventName = params.get('event');
+
+    // If no event was passed, redirect back to homepage
+    if (!eventName) {
+      window.location.href = 'index.html';
+    }
+
+    // --- Step 2: Event details map ---
+    // Add descriptions and badge labels for each event here
+    const eventDetails = {
+      'Phantom League': {
+        badge: 'Football',
+        description: 'Experience the thrill of the pitch where teams battle for supremacy in an electrifying tournament filled with skill, strategy, and unforgettable moments.'
+      },
+      'VolleyX': {
+        badge: 'Volleyball',
+        description: 'Dominate the court with powerful spikes, precise blocks, and team coordination in this high-flying volleyball championship.'
+      },
+      'PowerPlay Premier': {
+        badge: 'Cricket',
+        description: 'Witness the intensity of bat and ball in a series of epic matches where strategy, skill, and determination decide the champions in this ultimate showdown.'
+      }
+    };
+
+    // --- Step 3: Fill in the page with event details ---
+    const details = eventDetails[eventName] || {
+      badge: 'Event',
+      description: 'Join us for this exciting event.'
+    };
+
+    document.getElementById('event-badge').textContent  = details.badge;
+    document.getElementById('event-title').textContent  = eventName;
+    document.getElementById('event-description').textContent = details.description;
+    document.title = eventName + ' — Sports Fest 2026';
+
+    // --- Step 4: Handle slot selection ---
+    // When user clicks a slot button, redirect to the registration page
+    // passing both ?event=... and ?slot=... in the URL
+    function selectSlot(timeSlot) {
+      // encodeURIComponent ensures spaces and special chars are URL-safe
+      const url = `register.html?event=${encodeURIComponent(eventName)}&slot=${encodeURIComponent(timeSlot)}`;
+      window.location.href = url;
+    }
+  </script>
+
+</body>
+</html>
